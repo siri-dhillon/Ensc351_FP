@@ -196,13 +196,14 @@ out:
  */
 SYSCALL_DEFINE1(cntcharkernel, char *, msg)
 {
-	char msg_buf[256];
+	char msg_buf[1024];
+	int size;
 	long copied = strncpy_from_user(msg_buf, msg, sizeof(msg_buf));
 	if (copied < 0 || copied == sizeof(msg_buf))
-		return -EFAULT;	
-	
-	printk(KERN_INFO "\nThe string provided has %s characters.\n",msg_buf);
-	return 0;
+		return -EFAULT;
+	size = strlen(msg);	
+	printk(KERN_INFO "The string provided has %i characters.\n", size);
+	return 0;	
 }
 
 
